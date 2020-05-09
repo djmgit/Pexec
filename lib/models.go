@@ -5,9 +5,3 @@ type Server struct {
 
 	Port int
 }
-
-type Providers struct {
-	CUSTOM string
-	
-	AWS string
-}
