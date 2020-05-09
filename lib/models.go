@@ -6,6 +6,7 @@ type Server struct {
 	Port int
 }
 
+// struct to hold response of executed command
 type CommandResponse struct {
 	StdOutput string
 
