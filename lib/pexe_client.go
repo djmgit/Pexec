@@ -1,5 +1,7 @@
 package lib
 
+const CUSTOM string = "CUSTOM"
+const AWS string = "AWS"
 
 type PexecClient struct {
 
@@ -13,4 +15,11 @@ type PexecClient struct {
 
 	BatchSize int
 
+}
+
+func (client *PexecClient) getDefaults()  {
+
+	if client.Provider == "" {
+		client.Provider = CUSTOM
+	}
 }
