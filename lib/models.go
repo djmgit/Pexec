@@ -5,3 +5,9 @@ type Server struct {
 
 	Port int
 }
+
+type CommandResponse struct {
+	StdOutput string
+
+	StdError string
+}
