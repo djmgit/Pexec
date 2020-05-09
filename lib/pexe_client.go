@@ -2,6 +2,7 @@ package lib
 
 import (
 	"os"
+	"golang.org/x/crypto/ssh"
 )
 
 const CUSTOM string = "CUSTOM"
@@ -23,6 +24,8 @@ type PexecClient struct {
 	User string
 
 	KeyPath string
+
+	SSHConConfig *ssh.ClientConfig
 }
 
 func (client *PexecClient) getDefaults()  {
@@ -38,4 +41,8 @@ func (client *PexecClient) getDefaults()  {
 	if client.KeyPath == "" {
 		client.KeyPath = os.Getenv("HOME") + "/.ssh/id_rsa"
 	}
+
+	var sshconerror error
+
+	client.SSHConConfig = PrepareSSHConConfig()
 }
