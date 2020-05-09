@@ -7,13 +7,21 @@ import (
 
 func PrepareSSHConConfig(user, keyPath string) (*ssh.ClientConfig, error) {
 
+	signer, err := getPublicKeyAuth(keyPath)
+
+	if err != nil {
+		return nil, err
+	}
+
 	config := &ssh.ClientConfig{
 		User: user,
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 		Auth: []ssh.AuthMethod{
-		  ssh.PublicKeys(signer),
+		  signer,
 		},
 	}
+
+	return config, nil
 }
 
 func getPublicKeyAuth(file string) (ssh.AuthMethod, error) {
