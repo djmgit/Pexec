@@ -44,5 +44,9 @@ func (client *PexecClient) getDefaults()  {
 
 	var sshconerror error
 
-	client.SSHConConfig = PrepareSSHConConfig()
+	client.SSHConConfig, sshconerror = PrepareSSHConConfig(client.User, client.KeyPath)
+
+	if sshconerror != nil {
+		panic(sshconerror.Error)
+	}
 }
