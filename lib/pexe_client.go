@@ -51,7 +51,7 @@ func (client *PexecClient) getDefaults()  {
 	}
 }
 
-func (client *PexecClient) Run(command string) ([]ComandResponseWithServer, error) {
+func (client *PexecClient) Run(command string) ([]CommandResponseWithServer, error) {
 
 	return nil, nil
 }

@@ -74,3 +74,44 @@ func SerialExecute(command string, sshClientConfig *ssh.ClientConfig,  targetSer
 
 	return &commandResponseWithServerList, nil
 }
+
+func ParallelBatchExecute(command string, sshClientConfig *ssh.ClientConfig, targetServers []Server, done <-chan string) (<-chan CommandResponseWithServer, error) {
+
+	commandResponseWithServerChan := make(chan CommandResponseWithServer)
+	defer close(commandResponseWithServerChan)
+
+	for _, server := range(targetServers) {
+
+		go func() {
+
+			CommandResponse, err := ExecuteCommand(command, nil, sshClientConfig, server.Host, server.Port)
+			var commandResponseWithServer CommandResponseWithServer
+
+			if err == nil {
+
+				commandResponseWithServer = CommandResponseWithServer{
+
+					Host: server.Host,
+					CommandResponse: *CommandResponse,
+				}
+			} else {
+				commandResponseWithServer = CommandResponseWithServer{
+
+					Host: server.Host,
+					Err: err.Error(),
+				}
+			}
+
+			for {
+				select {
+				case commandResponseWithServerChan <- commandResponseWithServer:
+				case <- done:
+					return
+				}
+			}
+
+		}()
+	}
+
+	return commandResponseWithServerChan, nil
+}
