@@ -13,8 +13,10 @@ type CommandResponse struct {
 	StdError string
 }
 
-type ComandResponseWithServer struct {
+type CommandResponseWithServer struct {
 	Host string
+
+	Err string
 
 	CommandResponse CommandResponse
 }

@@ -44,3 +44,33 @@ func ExecuteCommand(command string, session *ssh.Session, config *ssh.ClientConf
 		StdError: StdError.String(),
 	}, nil
 }
+
+func SerialExecute(command string, sshClientConfig *ssh.ClientConfig,  targetServers []Server) (*[]CommandResponseWithServer, error) {
+
+	commandResponseWithServerList := make([]CommandResponseWithServer, 0, 0)
+
+	for _, server := range(targetServers) {
+
+		CommandResponse, err := ExecuteCommand(command, nil, sshClientConfig, server.Host, server.Port)
+		var commandResponseWithServer CommandResponseWithServer
+
+		if err == nil {
+
+			commandResponseWithServer = CommandResponseWithServer{
+
+				Host: server.Host,
+				CommandResponse: *CommandResponse,
+			}
+		} else {
+			commandResponseWithServer = CommandResponseWithServer{
+
+				Host: server.Host,
+				Err: err.Error(),
+			}
+		}
+
+		commandResponseWithServerList = append(commandResponseWithServerList, commandResponseWithServer)
+	}
+
+	return &commandResponseWithServerList, nil
+}
