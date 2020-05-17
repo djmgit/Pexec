@@ -50,3 +50,8 @@ func (client *PexecClient) getDefaults()  {
 		panic(sshconerror.Error)
 	}
 }
+
+func (client *PexecClient) Run(command string) ([]ComandResponseWithServer, error) {
+
+	return nil, nil
+}
