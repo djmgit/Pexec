@@ -26,6 +26,8 @@ type PexecClient struct {
 
 	KeyPath string
 
+	TimeOut time.Duration
+
 	SSHConConfig *ssh.ClientConfig
 }
 
@@ -41,6 +43,10 @@ func (client *PexecClient) getDefaults()  {
 
 	if client.KeyPath == "" {
 		client.KeyPath = os.Getenv("HOME") + "/.ssh/id_rsa"
+	}
+
+	if client.TimeOut == 0 {
+		client.TimeOut = 30
 	}
 
 	var sshconerror error
@@ -69,7 +75,7 @@ func (client *PexecClient) Run(command string) ([]CommandResponseWithServer, err
 			commandResponseWithServer = append(commandResponseWithServer, individualServerResponse)
 		}
 
-		time.Sleep(10 * time.Second)
+		time.Sleep(client.TimeOut * time.Second)
 		close(done)
 
 		return commandResponseWithServer, nil
