@@ -55,6 +55,19 @@ func (client *PexecClient) Run(command string) ([]CommandResponseWithServer, err
 
 	if client.Parallel {
 
+		done := make(chan string)
+		commandResponseWithServer := make([]CommandResponseWithServer, 0, 0)
+
+		individualServerResponseChannel, err := ParallelBatchExecute(command, client.SSHConConfig, client.TargetServers, done)
+
+		if err != nil {
+			return nil, err
+		}
+
+		for individualServerResponse := range individualServerResponseChannel {
+			commandResponseWithServer = append(commandResponseWithServer, individualServerResponse)
+		}
+
 	} else {
 
 		commandResponseWithServer, err := SerialExecute(command, client.SSHConConfig, client.TargetServers)
