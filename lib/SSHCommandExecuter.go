@@ -45,7 +45,7 @@ func ExecuteCommand(command string, session *ssh.Session, config *ssh.ClientConf
 	}, nil
 }
 
-func SerialExecute(command string, sshClientConfig *ssh.ClientConfig,  targetServers []Server) (*[]CommandResponseWithServer, error) {
+func SerialExecute(command string, sshClientConfig *ssh.ClientConfig,  targetServers []Server) ([]CommandResponseWithServer, error) {
 
 	commandResponseWithServerList := make([]CommandResponseWithServer, 0, 0)
 
@@ -72,7 +72,7 @@ func SerialExecute(command string, sshClientConfig *ssh.ClientConfig,  targetSer
 		commandResponseWithServerList = append(commandResponseWithServerList, commandResponseWithServer)
 	}
 
-	return &commandResponseWithServerList, nil
+	return commandResponseWithServerList, nil
 }
 
 func ParallelBatchExecute(command string, sshClientConfig *ssh.ClientConfig, targetServers []Server, done <-chan string) (<-chan CommandResponseWithServer, error) {

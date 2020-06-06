@@ -53,5 +53,18 @@ func (client *PexecClient) getDefaults()  {
 
 func (client *PexecClient) Run(command string) ([]CommandResponseWithServer, error) {
 
+	if client.Parallel {
+
+	} else {
+
+		commandResponseWithServer, err := SerialExecute(command, client.SSHConConfig, client.TargetServers)
+
+		if err != nil {
+			return nil, err
+		} else {
+			return commandResponseWithServer, nil
+		}
+	}
+
 	return nil, nil
 }
