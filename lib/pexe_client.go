@@ -3,6 +3,7 @@ package lib
 import (
 	"os"
 	"golang.org/x/crypto/ssh"
+	"time"
 )
 
 const CUSTOM string = "CUSTOM"
@@ -67,6 +68,11 @@ func (client *PexecClient) Run(command string) ([]CommandResponseWithServer, err
 		for individualServerResponse := range individualServerResponseChannel {
 			commandResponseWithServer = append(commandResponseWithServer, individualServerResponse)
 		}
+
+		time.Sleep(10 * time.Second)
+		close(done)
+
+		return commandResponseWithServer, nil
 
 	} else {
 
