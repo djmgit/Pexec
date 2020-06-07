@@ -19,7 +19,7 @@ func main() {
 			},
 		},
 
-		Parallel: false,
+		Parallel: true,
 
 		User: "ubuntu",
 

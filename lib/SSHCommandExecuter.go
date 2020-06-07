@@ -3,11 +3,12 @@ package lib
 import (
 	"bytes"
 	"golang.org/x/crypto/ssh"
+	"strconv"
 )
 
 func GetSSHSession(config *ssh.ClientConfig, host string, port int) (*ssh.Session, error) {
 
-	client, err := ssh.Dial("tcp", host + ":" + string(port), config)
+	client, err := ssh.Dial("tcp", host + ":" + strconv.FormatInt(int64(port), 10), config)
 
 	session, err := client.NewSession()
   	if err != nil {
@@ -75,10 +76,10 @@ func SerialExecute(command string, sshClientConfig *ssh.ClientConfig,  targetSer
 	return commandResponseWithServerList, nil
 }
 
-func ParallelBatchExecute(command string, sshClientConfig *ssh.ClientConfig, targetServers []Server, done <-chan string) (<-chan CommandResponseWithServer, error) {
+func ParallelBatchExecute(command string, sshClientConfig *ssh.ClientConfig, targetServers []Server, done <-chan string) (chan CommandResponseWithServer, error) {
 
 	commandResponseWithServerChan := make(chan CommandResponseWithServer)
-	defer close(commandResponseWithServerChan)
+	//defer close(commandResponseWithServerChan)
 
 	for _, server := range(targetServers) {
 

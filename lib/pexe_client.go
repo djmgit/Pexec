@@ -4,6 +4,7 @@ import (
 	"os"
 	"golang.org/x/crypto/ssh"
 	"time"
+	"fmt"
 )
 
 const CUSTOM string = "CUSTOM"
@@ -54,11 +55,13 @@ func (client *PexecClient) getDefaults()  {
 	client.SSHConConfig, sshconerror = PrepareSSHConConfig(client.User, client.KeyPath)
 
 	if sshconerror != nil {
-		panic(sshconerror.Error)
+		panic(sshconerror.Error())
 	}
 }
 
 func (client *PexecClient) Run(command string) ([]CommandResponseWithServer, error) {
+
+	client.getDefaults()
 
 	if client.Parallel {
 
@@ -71,12 +74,14 @@ func (client *PexecClient) Run(command string) ([]CommandResponseWithServer, err
 			return nil, err
 		}
 
-		for individualServerResponse := range individualServerResponseChannel {
+		for _, _ = range client.TargetServers {
+			individualServerResponse := <-individualServerResponseChannel
 			commandResponseWithServer = append(commandResponseWithServer, individualServerResponse)
 		}
 
-		time.Sleep(client.TimeOut * time.Second)
+		//time.Sleep(client.TimeOut * time.Second)
 		close(done)
+		close(individualServerResponseChannel)
 
 		return commandResponseWithServer, nil
 
