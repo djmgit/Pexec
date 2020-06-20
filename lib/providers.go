@@ -16,7 +16,7 @@ type AWSProvider struct {
 	SecretAccessKey string
 }
 
-func (provider *AWSProvider) GetServers() ([]string, error) {
+func (provider AWSProvider) GetServers() ([]string, error) {
 	
 	discoverer := discover.Discover{
 		Providers : map[string]discover.Provider{
