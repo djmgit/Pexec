@@ -1,7 +1,7 @@
 package lib
 
 import (
-	"github.com/hashicorp/go-discover"
+	discover "github.com/hashicorp/go-discover"
 )
 
 type AWSProvider struct {
@@ -14,6 +14,12 @@ type AWSProvider struct {
 }
 
 func (provider *AWSProvider) GetServers() {
-
 	
+	discoverer := discover.Discover{
+		Providers : map[string]discover.Provider{
+			"aws": discover.Providers["aws"],
+		},
+	}
+
+	cfg := "provider=aws region=%s access_key_id=%s secret_access_key=%s addr_type=%s tag_key=%s tag_value=%s", provider.Region, provider.AccessKeyId, provider.SecretAccessKey, provider.AddrType, provider.TagKey, provider.TagValue
 }
