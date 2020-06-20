@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"golang.org/x/crypto/ssh"
 	"strconv"
+	"fmt"
 )
 
 func GetSSHSession(config *ssh.ClientConfig, host string, port int) (*ssh.Session, error) {
@@ -20,6 +21,7 @@ func GetSSHSession(config *ssh.ClientConfig, host string, port int) (*ssh.Sessio
 
 func ExecuteCommand(command string, session *ssh.Session, config *ssh.ClientConfig, host string, port int) (*CommandResponse, error) {
 
+	fmt.Println("Executing for " + host)
 	if session == nil {
 		var sessionErr error
 		session, sessionErr = GetSSHSession(config, host, port)
@@ -76,43 +78,64 @@ func SerialExecute(command string, sshClientConfig *ssh.ClientConfig,  targetSer
 	return commandResponseWithServerList, nil
 }
 
-func ParallelBatchExecute(command string, sshClientConfig *ssh.ClientConfig, targetServers []Server, done <-chan string) (chan CommandResponseWithServer, error) {
+func ParallelBatchExecute(command string, sshClientConfig *ssh.ClientConfig, targetServers []Server) ([]CommandResponseWithServer, error) {
 
 	commandResponseWithServerChan := make(chan CommandResponseWithServer)
+	done := make(chan string)
 	//defer close(commandResponseWithServerChan)
 
 	for _, server := range(targetServers) {
 
-		go func() {
+		fmt.Println("Starting goroutine for " + server.Host)
 
-			CommandResponse, err := ExecuteCommand(command, nil, sshClientConfig, server.Host, server.Port)
+		go func(localServer Server) {
+
+			fmt.Println("This goroutine belong's to " + localServer.Host)
+
+			CommandResponse, err := ExecuteCommand(command, nil, sshClientConfig, localServer.Host, localServer.Port)
 			var commandResponseWithServer CommandResponseWithServer
+
+			t := *CommandResponse
+			fmt.Println("**********************************")
+			fmt.Println(localServer.Host + " : " + t.StdOutput)
 
 			if err == nil {
 
 				commandResponseWithServer = CommandResponseWithServer{
 
-					Host: server.Host,
+					Host: localServer.Host,
 					CommandResponse: *CommandResponse,
 				}
 			} else {
 				commandResponseWithServer = CommandResponseWithServer{
 
-					Host: server.Host,
+					Host: localServer.Host,
 					Err: err.Error(),
 				}
 			}
 
 			for {
 				select {
-				case commandResponseWithServerChan <- commandResponseWithServer:
-				case <- done:
-					return
+					case commandResponseWithServerChan <- commandResponseWithServer:
+					case <- done:
+						return
 				}
 			}
 
-		}()
+		}(server)
 	}
 
-	return commandResponseWithServerChan, nil
+	commandResponseWithServer := make([]CommandResponseWithServer, 0, 0)
+
+	for _, _ = range targetServers {
+		individualServerResponse := <-commandResponseWithServerChan
+		//fmt.Println(individualServerResponse.Host)
+		commandResponseWithServer = append(commandResponseWithServer, individualServerResponse)
+	}
+
+	//time.Sleep(client.TimeOut * time.Second)
+	close(done)
+	close(commandResponseWithServerChan)
+
+	return commandResponseWithServer, nil
 }

@@ -4,7 +4,6 @@ import (
 	"os"
 	"golang.org/x/crypto/ssh"
 	"time"
-	"fmt"
 )
 
 const CUSTOM string = "CUSTOM"
@@ -65,23 +64,11 @@ func (client *PexecClient) Run(command string) ([]CommandResponseWithServer, err
 
 	if client.Parallel {
 
-		done := make(chan string)
-		commandResponseWithServer := make([]CommandResponseWithServer, 0, 0)
-
-		individualServerResponseChannel, err := ParallelBatchExecute(command, client.SSHConConfig, client.TargetServers, done)
+		commandResponseWithServer, err := ParallelBatchExecute(command, client.SSHConConfig, client.TargetServers)
 
 		if err != nil {
 			return nil, err
 		}
-
-		for _, _ = range client.TargetServers {
-			individualServerResponse := <-individualServerResponseChannel
-			commandResponseWithServer = append(commandResponseWithServer, individualServerResponse)
-		}
-
-		//time.Sleep(client.TimeOut * time.Second)
-		close(done)
-		close(individualServerResponseChannel)
 
 		return commandResponseWithServer, nil
 
