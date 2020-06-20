@@ -31,9 +31,9 @@ func main() {
 	if err != nil {
 		fmt.Println(err.Error())
 	} else {
+		fmt.Println("In main...")
 		for _, commandResponse := range response {
-			fmt.Println(commandResponse.Host)
-			fmt.Println(commandResponse.CommandResponse.StdOutput)
+			fmt.Println(commandResponse.Host + " : " + commandResponse.CommandResponse.StdOutput)
 		}
 	}
 

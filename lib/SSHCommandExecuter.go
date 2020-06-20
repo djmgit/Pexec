@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"golang.org/x/crypto/ssh"
 	"strconv"
-	"fmt"
+	//"fmt"
 )
 
 func GetSSHSession(config *ssh.ClientConfig, host string, port int) (*ssh.Session, error) {
@@ -21,7 +21,6 @@ func GetSSHSession(config *ssh.ClientConfig, host string, port int) (*ssh.Sessio
 
 func ExecuteCommand(command string, session *ssh.Session, config *ssh.ClientConfig, host string, port int) (*CommandResponse, error) {
 
-	fmt.Println("Executing for " + host)
 	if session == nil {
 		var sessionErr error
 		session, sessionErr = GetSSHSession(config, host, port)
@@ -82,22 +81,13 @@ func ParallelBatchExecute(command string, sshClientConfig *ssh.ClientConfig, tar
 
 	commandResponseWithServerChan := make(chan CommandResponseWithServer)
 	done := make(chan string)
-	//defer close(commandResponseWithServerChan)
 
 	for _, server := range(targetServers) {
 
-		fmt.Println("Starting goroutine for " + server.Host)
-
 		go func(localServer Server) {
-
-			fmt.Println("This goroutine belong's to " + localServer.Host)
 
 			CommandResponse, err := ExecuteCommand(command, nil, sshClientConfig, localServer.Host, localServer.Port)
 			var commandResponseWithServer CommandResponseWithServer
-
-			t := *CommandResponse
-			fmt.Println("**********************************")
-			fmt.Println(localServer.Host + " : " + t.StdOutput)
 
 			if err == nil {
 
@@ -114,13 +104,12 @@ func ParallelBatchExecute(command string, sshClientConfig *ssh.ClientConfig, tar
 				}
 			}
 
-			for {
-				select {
-					case commandResponseWithServerChan <- commandResponseWithServer:
-					case <- done:
-						return
-				}
+			select {
+				case commandResponseWithServerChan <- commandResponseWithServer:
+				case <- done:
+					return
 			}
+			//commandResponseWithServerChan <- commandResponseWithServer
 
 		}(server)
 	}
@@ -129,7 +118,6 @@ func ParallelBatchExecute(command string, sshClientConfig *ssh.ClientConfig, tar
 
 	for _, _ = range targetServers {
 		individualServerResponse := <-commandResponseWithServerChan
-		//fmt.Println(individualServerResponse.Host)
 		commandResponseWithServer = append(commandResponseWithServer, individualServerResponse)
 	}
 
