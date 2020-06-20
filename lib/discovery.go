@@ -1,7 +1,5 @@
 package lib
 
-import (
-	"github.com/hashicorp/go-discover"
-)
-
-func Discover(provider string)
+type Provider interface {
+	GetServers() ([]string, error)
+}
