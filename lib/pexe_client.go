@@ -14,7 +14,7 @@ type PexecClient struct {
 
 	TargetServers []Server
 
-	AWSOptions AWSProviderOptions
+	ProviderOptions map[string]string
 
 	Provider string
 
