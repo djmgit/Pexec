@@ -9,7 +9,7 @@ func GetProviderHandler(providerType string) (Provider) {
 	var provider Provider
 
 	switch providerType {
-	case "aws":
+	case "AWS":
 		provider = AWSProvider{}
 	}
 

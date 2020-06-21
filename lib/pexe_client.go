@@ -14,6 +14,8 @@ type PexecClient struct {
 
 	TargetServers []Server
 
+	AWSOptions AWSProviderOptions
+
 	Provider string
 
 	Parallel bool
@@ -55,6 +57,16 @@ func (client *PexecClient) getDefaults()  {
 
 	if sshconerror != nil {
 		panic(sshconerror.Error())
+	}
+}
+
+func (client *PexecClient) populateTargetServers() {
+
+	provider := GetProviderHandler(client.Provider)
+
+	switch client.Provider {
+	case AWS:
+		provider.Region = AWSOptions.Region
 	}
 }
 

@@ -20,3 +20,12 @@ type CommandResponseWithServer struct {
 
 	CommandResponse CommandResponse
 }
+
+type AWSProviderOptions struct {
+	Region string
+	TagKey string
+	TagValue string
+	AddrType string
+	AccessKeyId string
+	SecretAccessKey string
+}

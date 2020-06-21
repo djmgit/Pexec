@@ -7,16 +7,9 @@ import (
 	"os"
 )
 
-type AWSProvider struct {
-	Region string
-	TagKey string
-	TagValue string
-	AddrType string 
-	AccessKeyId string
-	SecretAccessKey string
-}
+type AWSProvider struct {}
 
-func (provider AWSProvider) GetServers() ([]string, error) {
+func (provider AWSProvider) GetServers(providerOptions AWSProviderOptions) ([]string, error) {
 	
 	discoverer := discover.Discover{
 		Providers : map[string]discover.Provider{
@@ -26,7 +19,7 @@ func (provider AWSProvider) GetServers() ([]string, error) {
 
 	logger := log.New(os.Stderr, "", log.LstdFlags)
 
-	cfg := fmt.Sprintf("provider=aws region=%s access_key_id=%s secret_access_key=%s addr_type=%s tag_key=%s tag_value=%s", provider.Region, provider.AccessKeyId, provider.SecretAccessKey, provider.AddrType, provider.TagKey, provider.TagValue)
+	cfg := fmt.Sprintf("provider=aws region=%s access_key_id=%s secret_access_key=%s addr_type=%s tag_key=%s tag_value=%s", providerOptions.Region, providerOptions.AccessKeyId, providerOptions.SecretAccessKey, providerOptions.AddrType, providerOptions.TagKey, providerOptions.TagValue)
 	serverIps, err := discoverer.Addrs(cfg, logger)
 
 	if err != nil {
