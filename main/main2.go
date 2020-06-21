@@ -7,6 +7,15 @@ import (
 
 func main() {
 
+	providerOptions := map[string]string{
+		"region": "us-east-1",
+		"addrType": "public_v4",
+		"tagKey": "aws:autoscaling:groupName",
+		"tagValue": "asg_1",
+		"accessKeyId": "",
+		"secretAccessKey": "",
+	}
+
 	pClient := pexec.PexecClient{
 		TargetServers : []pexec.Server{
 			{
@@ -23,10 +32,14 @@ func main() {
 
 		User: "ubuntu",
 
+		Provider: "AWS",
+
+		ProviderOptions: providerOptions,
+
 		KeyPath: "/home/deep/aws_keys/admin2.pem",
 	}
 
-	response, err := pClient.Run("ls")
+	response, err := pClient.Run("ls /usr/bin")
 
 	if err != nil {
 		fmt.Println(err.Error())
