@@ -37,6 +37,8 @@ func (client *PexecClient) getDefaults()  {
 
 	if client.Provider == "" {
 		client.Provider = CUSTOM
+	} else {
+		client.populateTargetServers()
 	}
 
 	if client.User == "" {
