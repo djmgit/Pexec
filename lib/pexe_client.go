@@ -64,9 +64,10 @@ func (client *PexecClient) populateTargetServers() {
 
 	provider := GetProviderHandler(client.Provider)
 
-	switch client.Provider {
-	case AWS:
-		provider.Region = AWSOptions.Region
+	serverIps, err := provider.GetServers(client.ProviderOptions)
+
+	if err != nil {
+		panic(err.Error())
 	}
 }
 

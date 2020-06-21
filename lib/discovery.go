@@ -1,7 +1,7 @@
 package lib
 
 type Provider interface {
-	GetServers() ([]string, error)
+	GetServers(map[string]string) ([]string, error)
 }
 
 func GetProviderHandler(providerType string) (Provider) {
