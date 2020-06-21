@@ -69,6 +69,18 @@ func (client *PexecClient) populateTargetServers() {
 	if err != nil {
 		panic(err.Error())
 	}
+
+	targetServers := make([]Server, 0, 0)
+
+	for _, serverIp := range serverIps {
+		targetServers = append(targetServers, Server{
+			Host: serverIp,
+			Port: 22,
+		})
+	}
+
+	client.TargetServers = targetServers
+
 }
 
 func (client *PexecClient) Run(command string) ([]CommandResponseWithServer, error) {
