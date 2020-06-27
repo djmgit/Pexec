@@ -119,6 +119,4 @@ func (client *PexecClient) Run(command string) ([]CommandResponseWithServer, err
 			return commandResponseWithServer, nil
 		}
 	}
-
-	return nil, nil
 }
