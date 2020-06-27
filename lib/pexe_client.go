@@ -91,6 +91,16 @@ func (client *PexecClient) Run(command string) ([]CommandResponseWithServer, err
 
 	if client.Parallel {
 
+		if client.BatchSize != 0 {
+			commandResponseWithServer, err := BatchExecuter(command, client.SSHConConfig, client.TargetServers, client.BatchSize)
+
+			if err != nil {
+				return nil, err
+			}
+
+			return commandResponseWithServer, nil
+		}
+
 		commandResponseWithServer, err := ParallelBatchExecute(command, client.SSHConConfig, client.TargetServers)
 
 		if err != nil {
