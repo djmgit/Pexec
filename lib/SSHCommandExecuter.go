@@ -142,5 +142,11 @@ func BatchExecuter(command string, sshClientConfig *ssh.ClientConfig, targetServ
 		if err != nil {
 			return nil, err
 		}
+
+		commandResponseAllBatches = append(commandResponseAllBatches, commandResponseWithServer...)
+
+		index += batchSize
 	}
+
+	return commandResponseAllBatches, nil
 }
