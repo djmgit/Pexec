@@ -127,3 +127,20 @@ func ParallelBatchExecute(command string, sshClientConfig *ssh.ClientConfig, tar
 
 	return commandResponseWithServer, nil
 }
+
+func BatchExecuter(command string, sshClientConfig *ssh.ClientConfig, targetServers []Server, batchSize int) ([]CommandResponseWithServer, error) {
+
+	commandResponseAllBatches := make([]CommandResponseWithServer, 0, 0)
+
+	index := 0
+
+	for index < len(targetServers) {
+		serversBatch := targetServers[index: index + batchSize]
+
+		commandResponseWithServer, err := ParallelBatchExecute(command, sshClientConfig, serversBatch)
+
+		if err != nil {
+			return nil, err
+		}
+	}
+}
