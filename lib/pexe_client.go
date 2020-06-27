@@ -14,6 +14,8 @@ type PexecClient struct {
 
 	TargetServers []Server
 
+	Port int
+
 	ProviderOptions map[string]string
 
 	Provider string
@@ -75,10 +77,17 @@ func (client *PexecClient) populateTargetServers() {
 	targetServers := make([]Server, 0, 0)
 
 	for _, serverIp := range serverIps {
-		targetServers = append(targetServers, Server{
+
+		server := Server {
 			Host: serverIp,
 			Port: 22,
-		})
+		}
+
+		if client.Port != 0 {
+			server.Port = client.Port
+		}
+
+		targetServers = append(targetServers, server)
 	}
 
 	client.TargetServers = targetServers

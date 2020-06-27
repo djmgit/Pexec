@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"golang.org/x/crypto/ssh"
 	"strconv"
-	//"fmt"
 )
 
 func GetSSHSession(config *ssh.ClientConfig, host string, port int) (*ssh.Session, error) {
