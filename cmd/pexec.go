@@ -2,11 +2,13 @@ package main
 
 import (
 	"flag"
-	"github.com/djmgit/pexec/lib"
+	lib "github.com/djmgit/pexec/lib"
 	"fmt"
 )
 
 func main() {
+
+	cmdParams := lib.CmdParam{}
 
 	accessKeyId := flag.String("access_key_id", "", "AWS Access key id")
 	secretAccessKey := flag.String("secret_access_key", "", "AWS secret access key")

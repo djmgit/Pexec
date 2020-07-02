@@ -20,3 +20,30 @@ type CommandResponseWithServer struct {
 
 	CommandResponse CommandResponse
 }
+
+type CmdParam struct {
+	AccessKeyId string
+
+	SecretAccessKey string
+
+	AsgName string
+
+	TagKey string
+
+	TagValue string
+
+	Servers string
+
+	Port int
+
+	Provider string
+
+	Parallel bool
+
+	BatchSize int
+
+	User string
+
+	KeyPath string
+
+}
