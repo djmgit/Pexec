@@ -21,7 +21,7 @@ type CommandResponseWithServer struct {
 	CommandResponse CommandResponse
 }
 
-type CmdParam struct {
+type CmdParams struct {
 	AccessKeyId string
 
 	SecretAccessKey string
