@@ -4,6 +4,8 @@ import (
 	"flag"
 	lib "github.com/djmgit/pexec/lib"
 	"fmt"
+	"err"
+	"strings"
 )
 
 func main() {
@@ -26,8 +28,33 @@ func main() {
 
 func getDefaults(cmdParams *lib.CmdParams) error {
 
-	
+	if cmdParams.Provider == "CUSTOM" {
+		if cmdParams.Servers == "" {
+			return error.Error("Please provide target servers")
+		}
 
+		servers, err := getServers(cmdParams.Servers)
+	}
+
+}
+
+func getServers(servers string) ([]lib.Server) {
+
+	serverStrings := strings.Split(servers, ",")
+
+	servers := make(lib.Server. 0, 0)
+
+	for _, serverString := range serverStrings {
+		serverIP := strings.Split(serverString, ":")[0]
+		serverPort := strings.Split(serverString, ":")[1]
+
+		servers = append(servers, lib.Server {
+			Host: serverIP,
+			Port: serverPort
+		})
+	}
+
+	return servers
 }
 
 

@@ -46,4 +46,6 @@ type CmdParams struct {
 
 	KeyPath string
 
+	TargetServers []Server
+
 }
