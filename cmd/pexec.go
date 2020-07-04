@@ -32,8 +32,6 @@ func main() {
 
 	flag.Parse()
 
-	//fmt.Println(cmdParams.Provider)
-
 	err := getDefaults(&cmdParams)
 
 	if err != nil {
@@ -59,7 +57,7 @@ func main() {
 			"region": cmdParams.Region,
 			"addrType": cmdParams.AddrType,
 			"tagKey": cmdParams.TagKey,
-			"tagVal": cmdParams.TagValue,
+			"tagValue": cmdParams.TagValue,
 			"accessKeyId": cmdParams.AccessKeyId,
 			"secretAccessKey": cmdParams.SecretAccessKey,
 		}
