@@ -14,22 +14,25 @@ func main() {
 
 	cmdParams := lib.CmdParams{}
 
-	cmdParams.AccessKeyId = *flag.String("access_key_id", "", "AWS Access key id")
-	cmdParams.SecretAccessKey = *flag.String("secret_access_key", "", "AWS secret access key")
-	cmdParams.AsgName = *flag.String("asg", "", "AWS Auto scaling group name")
-	cmdParams.TagKey = *flag.String("tag_key", "", "tag key name")
-	cmdParams.TagValue = *flag.String("tag_value", "", "tag value")
-	cmdParams.Servers = *flag.String("servers", "", "Server ip and port in format <IP>:<PORT>, multuple values can be separated by ','. If port is not provided then 22 will be used as default SSH port")
-	cmdParams.Port = *flag.Int("port", 0, "Port to override for all")
-	cmdParams.Provider = *flag.String("provider", "CUSTOM", "Provider of servers - can be one of CUSTOM | AWS")
-	cmdParams.Parallel = *flag.Bool("parallel", true, "If true then commands will be exected in parallel on the discovered or provided servers")
-	cmdParams.BatchSize = *flag.Int("batch_size", 0, "If more than one, then batches of that many servers will be executed in parallel")
-	cmdParams.User = *flag.String("user", "root", "User which will be used to login to the server")
-	cmdParams.KeyPath = *flag.String("key", "", "If not provided then default key path for rsa key will be used - /home/<user>/.ssh/id_rsa")
-	cmdParams.Command = *flag.String("cmd", "", "Command to execute on the servers")
-	cmdParams.Region = *flag.String("region", "us-east-1", "AWS region if provider is aws, default is us-east-1")
-	cmdParams.AddrType = *flag.String("addr_type", "public_v4", "Command to execute on the servers")
+	flag.StringVar(&cmdParams.AccessKeyId, "access_key_id", "", "AWS Access key id")
+	flag.StringVar(&cmdParams.SecretAccessKey, "secret_access_key", "", "AWS secret access key")
+	flag.StringVar(&cmdParams.AsgName, "asg", "", "AWS Auto scaling group name")
+	flag.StringVar(&cmdParams.TagKey, "tag_key", "", "tag key name")
+	flag.StringVar(&cmdParams.TagValue, "tag_value", "", "tag value")
+	flag.StringVar(&cmdParams.Servers, "servers", "", "Server ip and port in format <IP>:<PORT>, multuple values can be separated by ','. If port is not provided then 22 will be used as default SSH port")
+	flag.IntVar(&cmdParams.Port, "port", 0, "Port to override for all")
+	flag.StringVar(&cmdParams.Provider, "provider", "CUSTOM", "Provider of servers - can be one of CUSTOM | AWS")
+	flag.BoolVar(&cmdParams.Parallel, "parallel", true, "If true then commands will be exected in parallel on the discovered or provided servers")
+	flag.IntVar(&cmdParams.BatchSize, "batch_size", 0, "If more than one, then batches of that many servers will be executed in parallel")
+	flag.StringVar(&cmdParams.User, "user", "root", "User which will be used to login to the server")
+	flag.StringVar(&cmdParams.KeyPath, "key", "", "If not provided then default key path for rsa key will be used - /home/<user>/.ssh/id_rsa")
+	flag.StringVar(&cmdParams.Command, "cmd", "", "Command to execute on the servers")
+	flag.StringVar(&cmdParams.Region, "region", "us-east-1", "AWS region if provider is aws, default is us-east-1")
+	flag.StringVar(&cmdParams.AddrType, "addr_type", "public_v4", "Command to execute on the servers")
 
+	flag.Parse()
+
+	//fmt.Println(cmdParams.Provider)
 
 	err := getDefaults(&cmdParams)
 
