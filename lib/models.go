@@ -50,4 +50,8 @@ type CmdParams struct {
 
 	TargetServers []Server
 
+	Region string
+
+	AddrType string
+
 }

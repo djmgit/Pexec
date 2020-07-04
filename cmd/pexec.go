@@ -27,12 +27,39 @@ func main() {
 	cmdParams.User = *flag.String("user", "root", "User which will be used to login to the server")
 	cmdParams.KeyPath = *flag.String("key", "", "If not provided then default key path for rsa key will be used - /home/<user>/.ssh/id_rsa")
 	cmdParams.Command = *flag.String("cmd", "", "Command to execute on the servers")
+	cmdParams.Region = *flag.String("region", "us-east-1", "AWS region if provider is aws, default is us-east-1")
+	cmdParams.AddrType = *flag.String("addr_type", "public_v4", "Command to execute on the servers")
+
 
 	err := getDefaults(&cmdParams)
 
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(2)
+	}
+
+	pexecClient := lib.PexecClient{
+		Provider: cmdParams.Provider,
+		Port: cmdParams.Port,
+		Parallel: cmdParams.Parallel,
+		BatchSize: cmdParams.BatchSize,
+		User: cmdParams.User,
+		KeyPath: cmdParams.KeyPath,
+	}
+
+	if cmdParams.Provider == "CUSTOM" {
+		pexecClient.TargetServers = cmdParams.TargetServers
+	}
+
+	if cmdParams.Provider == "AWS" {
+		pexecClient.ProviderOptions = map[string]string{
+			"region": cmdParams.Region,
+			"addrType": cmdParams.AddrType,
+			"tagKey": cmdParams.TagKey,
+			"tagVal": cmdParams.TagValue,
+			"accessKeyId": cmdParams.AccessKeyId,
+			"secretAccessKey": cmdParams.SecretAccessKey,
+		}
 	}
 }
 
@@ -77,7 +104,7 @@ func getServers(serversList string) ([]lib.Server) {
 
 	for _, serverString := range serverStrings {
 		serverIP := strings.Split(serverString, ":")[0]
-		serverPort, err := strconv.ParseInt(strings.Split(serverString, ":")[1], 10, 64)
+		serverPort, _ := strconv.ParseInt(strings.Split(serverString, ":")[1], 10, 64)
 
 		servers = append(servers, lib.Server {
 			Host: serverIP,
