@@ -45,10 +45,20 @@ func getDefaults(cmdParams *lib.CmdParams) error {
 		if cmdParams.AccessKeyId == "" || cmdParams.SecretAccessKey == "" {
 			return errors.New("Please provide aws access creds")
 		}
+
+		if cmdParams.TagKey != "" {
+			if cmdParams.TagValue == "" {
+				return errors.New("Please provide Tag value")
+			}
+		} else if cmdParams.AsgName != "" {
+			cmdParams.TagKey = "aws:autoscaling:groupName"
+			cmdParams.TagValue = cmdParams.AsgName
+		} else {
+
+			return errors.New("Please provide either ASG name or Tag key,value pair to discover aws instances")
+		}
 	}
-
 	return nil
-
 }
 
 func getServers(serversList string) ([]lib.Server) {
