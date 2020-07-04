@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 	"errors"
+	"os"
 )
 
 func main() {
@@ -26,6 +27,13 @@ func main() {
 	cmdParams.User = *flag.String("user", "root", "User which will be used to login to the server")
 	cmdParams.KeyPath = *flag.String("key", "", "If not provided then default key path for rsa key will be used - /home/<user>/.ssh/id_rsa")
 	cmdParams.Command = *flag.String("cmd", "", "Command to execute on the servers")
+
+	err := getDefaults(&cmdParams)
+
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(2)
+	}
 }
 
 func getDefaults(cmdParams *lib.CmdParams) error {
