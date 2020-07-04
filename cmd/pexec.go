@@ -61,6 +61,17 @@ func main() {
 			"secretAccessKey": cmdParams.SecretAccessKey,
 		}
 	}
+
+	response, err := pexecClient.Run(cmdParams.Command)
+
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(2)
+	}
+
+	for _, commandResponse := range response {
+		fmt.Println(commandResponse.Host + " : " + commandResponse.CommandResponse.StdOutput)
+	}
 }
 
 func getDefaults(cmdParams *lib.CmdParams) error {
