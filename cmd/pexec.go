@@ -4,8 +4,9 @@ import (
 	"flag"
 	lib "github.com/djmgit/pexec/lib"
 	"fmt"
-	"err"
+	"strconv"
 	"strings"
+	"errors"
 )
 
 func main() {
@@ -19,38 +20,42 @@ func main() {
 	cmdParams.TagValue = *flag.String("tag_value", "", "tag value")
 	cmdParams.Servers = *flag.String("servers", "", "Server ip and port in format <IP>:<PORT>, multuple values can be separated by ','. If port is not provided then 22 will be used as default SSH port")
 	cmdParams.Port = *flag.Int("port", 0, "Port to override for all")
-	cmdParams.Provider = *flag.String("provider", "", "Provider of servers - can be one of CUSTOM | AWS")
+	cmdParams.Provider = *flag.String("provider", "CUSTOM", "Provider of servers - can be one of CUSTOM | AWS")
 	cmdParams.Parallel = *flag.Bool("parallel", true, "If true then commands will be exected in parallel on the discovered or provided servers")
 	cmdParams.BatchSize = *flag.Int("batch_size", 0, "If more than one, then batches of that many servers will be executed in parallel")
-	cmdParams.User = *flag.String("user", "", "User which will be used to login to the server")
-	cmdParams.KeyPath = *flag.String("user", "", "If not provided then default key path for rsa key will be used - /home/<user>/.ssh/id_rsa")
+	cmdParams.User = *flag.String("user", "root", "User which will be used to login to the server")
+	cmdParams.KeyPath = *flag.String("key", "", "If not provided then default key path for rsa key will be used - /home/<user>/.ssh/id_rsa")
+	cmdParams.Command = *flag.String("cmd", "", "Command to execute on the servers")
 }
 
 func getDefaults(cmdParams *lib.CmdParams) error {
 
 	if cmdParams.Provider == "CUSTOM" {
 		if cmdParams.Servers == "" {
-			return error.Error("Please provide target servers")
+			return errors.New("Please provide target servers")
 		}
 
-		servers, err := getServers(cmdParams.Servers)
+		servers := getServers(cmdParams.Servers)
+		cmdParams.TargetServers = servers
 	}
+
+	return nil
 
 }
 
-func getServers(servers string) ([]lib.Server) {
+func getServers(serversList string) ([]lib.Server) {
 
-	serverStrings := strings.Split(servers, ",")
+	serverStrings := strings.Split(serversList, ",")
 
-	servers := make(lib.Server. 0, 0)
+	servers := make([]lib.Server, 0, 0)
 
 	for _, serverString := range serverStrings {
 		serverIP := strings.Split(serverString, ":")[0]
-		serverPort := strings.Split(serverString, ":")[1]
+		serverPort, err := strconv.ParseInt(strings.Split(serverString, ":")[1], 10, 64)
 
 		servers = append(servers, lib.Server {
 			Host: serverIP,
-			Port: serverPort
+			Port: int(serverPort),
 		})
 	}
 

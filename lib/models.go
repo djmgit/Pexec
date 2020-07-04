@@ -34,6 +34,8 @@ type CmdParams struct {
 
 	Servers string
 
+	Command string
+
 	Port int
 
 	Provider string
