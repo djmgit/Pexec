@@ -37,6 +37,14 @@ func getDefaults(cmdParams *lib.CmdParams) error {
 
 		servers := getServers(cmdParams.Servers)
 		cmdParams.TargetServers = servers
+
+		if cmdParams.Command == "" {
+			return errors.New("Please provide a command to execute on remote server")
+		}
+	} else if (cmdParams.Provider == "AWS") {
+		if cmdParams.AccessKeyId == "" || cmdParams.SecretAccessKey == "" {
+			return errors.New("Please provide aws access creds")
+		}
 	}
 
 	return nil
