@@ -4,6 +4,8 @@ import (
 	"os"
 	"golang.org/x/crypto/ssh"
 	"time"
+	"log"
+	"io/ioutil"
 )
 
 const CUSTOM string = "CUSTOM"
@@ -33,6 +35,10 @@ type PexecClient struct {
 	TimeOut time.Duration
 
 	SSHConConfig *ssh.ClientConfig
+
+	Debug bool
+
+	Logger *log.Logger
 }
 
 func (client *PexecClient) getDefaults()  {
@@ -62,13 +68,19 @@ func (client *PexecClient) getDefaults()  {
 	if sshconerror != nil {
 		panic(sshconerror.Error())
 	}
+
+	client.Logger = log.New(ioutil.Discard, "", 0)
+
+	if client.Debug == true {
+		client.Logger = log.New(os.Stderr, "", 0)
+	}
 }
 
 func (client *PexecClient) populateTargetServers() {
 
 	provider := GetProviderHandler(client.Provider)
 
-	serverIps, err := provider.GetServers(client.ProviderOptions)
+	serverIps, err := provider.GetServers(client.ProviderOptions, client.Logger)
 
 	if err != nil {
 		panic(err.Error())

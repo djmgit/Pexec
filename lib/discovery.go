@@ -1,7 +1,11 @@
 package lib
 
+import (
+	"log"
+)
+
 type Provider interface {
-	GetServers(map[string]string) ([]string, error)
+	GetServers(map[string]string, *log.Logger) ([]string, error)
 }
 
 func GetProviderHandler(providerType string) (Provider) {
