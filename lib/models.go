@@ -54,4 +54,6 @@ type CmdParams struct {
 
 	AddrType string
 
+	Debug bool
+
 }

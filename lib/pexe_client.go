@@ -43,6 +43,12 @@ type PexecClient struct {
 
 func (client *PexecClient) getDefaults()  {
 
+	client.Logger = log.New(ioutil.Discard, "", 0)
+
+	if client.Debug == true {
+		client.Logger = log.New(os.Stderr, "", 0)
+	}
+
 	if client.Provider == "" {
 		client.Provider = CUSTOM
 	} else {
@@ -69,11 +75,6 @@ func (client *PexecClient) getDefaults()  {
 		panic(sshconerror.Error())
 	}
 
-	client.Logger = log.New(ioutil.Discard, "", 0)
-
-	if client.Debug == true {
-		client.Logger = log.New(os.Stderr, "", 0)
-	}
 }
 
 func (client *PexecClient) populateTargetServers() {

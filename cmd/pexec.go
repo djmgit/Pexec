@@ -29,6 +29,7 @@ func main() {
 	flag.StringVar(&cmdParams.Command, "cmd", "", "Command to execute on the servers")
 	flag.StringVar(&cmdParams.Region, "region", "us-east-1", "AWS region if provider is aws, default is us-east-1")
 	flag.StringVar(&cmdParams.AddrType, "addr_type", "public_v4", "Command to execute on the servers")
+	flag.BoolVar(&cmdParams.Debug, "debug", false, "Enable debugging, by default false")
 
 	flag.Parse()
 
@@ -46,6 +47,7 @@ func main() {
 		BatchSize: cmdParams.BatchSize,
 		User: cmdParams.User,
 		KeyPath: cmdParams.KeyPath,
+		Debug: cmdParams.Debug,
 	}
 
 	if cmdParams.Provider == "CUSTOM" {
