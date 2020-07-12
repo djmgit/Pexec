@@ -78,6 +78,8 @@ func (client *PexecClient) getDefaults()  {
 
 func (client *PexecClient) populateTargetServers() {
 
+	client.Logger.Printf("Using provider %s", client.Provider)
+
 	provider := GetProviderHandler(client.Provider)
 
 	serverIps, err := provider.GetServers(client.ProviderOptions, client.Logger)
@@ -112,7 +114,11 @@ func (client *PexecClient) Run(command string) ([]CommandResponseWithServer, err
 
 	if client.Parallel {
 
+		client.Logger.Printf("Preparing to execuite comand in parallel...")
+
 		if client.BatchSize != 0 {
+
+			client.Logger.Printf("Batch size is %d, command will be executed in parallel in all servers in batches of selected size...", client.BatchSize)
 			commandResponseWithServer, err := BatchExecuter(command, client.SSHConConfig, client.TargetServers, client.BatchSize)
 
 			if err != nil {
@@ -122,6 +128,7 @@ func (client *PexecClient) Run(command string) ([]CommandResponseWithServer, err
 			return commandResponseWithServer, nil
 		}
 
+		client.Logger.Printf("Batch size is 0, command will be executed in all servers in parallel...")
 		commandResponseWithServer, err := ParallelBatchExecute(command, client.SSHConConfig, client.TargetServers)
 
 		if err != nil {
@@ -132,6 +139,7 @@ func (client *PexecClient) Run(command string) ([]CommandResponseWithServer, err
 
 	} else {
 
+		client.Logger.Printf("Preparing to execute command serially on all servers one by one...")
 		commandResponseWithServer, err := SerialExecute(command, client.SSHConConfig, client.TargetServers)
 
 		if err != nil {
