@@ -4,7 +4,7 @@ import (
 	discover "github.com/hashicorp/go-discover"
 	"fmt"
 	"log"
-	"os"
+	"io/ioutil"
 )
 
 type AWSProvider struct {}
@@ -17,10 +17,9 @@ func (provider AWSProvider) GetServers(providerOptions map[string]string) ([]str
 		},
 	}
 
-	logger := log.New(os.Stderr, "", log.LstdFlags)
+	logger := log.New(ioutil.Discard, "", log.LstdFlags)
 
 	cfg := fmt.Sprintf("provider=aws region=%s access_key_id=%s secret_access_key=%s addr_type=%s tag_key=%s tag_value=%s", providerOptions["region"], providerOptions["accessKeyId"], providerOptions["secretAccessKey"], providerOptions["addrType"], providerOptions["tagKey"], providerOptions["tagValue"])
-	fmt.Println(cfg)
 	serverIps, err := discoverer.Addrs(cfg, logger)
 
 	if err != nil {
