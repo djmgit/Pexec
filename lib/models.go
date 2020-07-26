@@ -13,6 +13,7 @@ type CommandResponse struct {
 	StdError string
 }
 
+// struct to hold command response with server properties
 type CommandResponseWithServer struct {
 	Host string
 
@@ -21,6 +22,7 @@ type CommandResponseWithServer struct {
 	CommandResponse CommandResponse
 }
 
+// strict to hold params provided from command line
 type CmdParams struct {
 	AccessKeyId string
 
