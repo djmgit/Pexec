@@ -12,6 +12,7 @@ const CUSTOM string = "CUSTOM"
 const AWS string = "AWS"
 const DEFAULT_USER = "root"
 
+// struct to pexec client properties
 type PexecClient struct {
 
 	TargetServers []Server
@@ -41,17 +42,24 @@ type PexecClient struct {
 	Logger *log.Logger
 }
 
+// function to set defaults in PexecClient struct
 func (client *PexecClient) getDefaults()  {
 
+	// create a default logger
 	client.Logger = log.New(ioutil.Discard, "", 0)
 
 	if client.Debug == true {
+
+		// Set log output to Stderr if debug is true
+		// Should allow writing to file in future
 		client.Logger = log.New(os.Stderr, "", 0)
 	}
 
 	if client.Provider == "" {
 		client.Provider = CUSTOM
 	} else {
+
+		// Populate servesrs from upstream provider
 		client.populateTargetServers()
 	}
 
