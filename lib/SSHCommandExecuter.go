@@ -64,6 +64,7 @@ func SerialExecute(command string, sshClientConfig *ssh.ClientConfig,  targetSer
 
 	commandResponseWithServerList := make([]CommandResponseWithServer, 0, 0)
 
+	// Iterate over the list if hosts and execute command remotely
 	for _, server := range(targetServers) {
 
 		CommandResponse, err := ExecuteCommand(command, nil, sshClientConfig, server.Host, server.Port, logger)
@@ -89,6 +90,7 @@ func SerialExecute(command string, sshClientConfig *ssh.ClientConfig,  targetSer
 	return commandResponseWithServerList, nil
 }
 
+// Fucntion to execute commands parallely on list of given servers
 func ParallelBatchExecute(command string, sshClientConfig *ssh.ClientConfig, targetServers []Server, logger *log.Logger) ([]CommandResponseWithServer, error) {
 
 	commandResponseWithServerChan := make(chan CommandResponseWithServer)
