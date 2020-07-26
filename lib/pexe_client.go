@@ -120,7 +120,7 @@ func (client *PexecClient) Run(command string) ([]CommandResponseWithServer, err
 		if client.BatchSize != 0 {
 
 			client.Logger.Printf("Batch size is %d, command will be executed in parallel in all servers in batches of selected size...", client.BatchSize)
-			commandResponseWithServer, err := BatchExecuter(command, client.SSHConConfig, client.TargetServers, client.BatchSize)
+			commandResponseWithServer, err := BatchExecuter(command, client.SSHConConfig, client.TargetServers, client.BatchSize, client.Logger)
 
 			if err != nil {
 				return nil, err
@@ -130,7 +130,7 @@ func (client *PexecClient) Run(command string) ([]CommandResponseWithServer, err
 		}
 
 		client.Logger.Printf("Batch size is 0, command will be executed in all servers in parallel...")
-		commandResponseWithServer, err := ParallelBatchExecute(command, client.SSHConConfig, client.TargetServers)
+		commandResponseWithServer, err := ParallelBatchExecute(command, client.SSHConConfig, client.TargetServers, client.Logger)
 
 		if err != nil {
 			return nil, err

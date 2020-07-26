@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"golang.org/x/crypto/ssh"
 	"strconv"
+	"log"
 )
 
 func GetSSHSession(config *ssh.ClientConfig, host string, port int) (*ssh.Session, error) {
@@ -76,7 +77,7 @@ func SerialExecute(command string, sshClientConfig *ssh.ClientConfig,  targetSer
 	return commandResponseWithServerList, nil
 }
 
-func ParallelBatchExecute(command string, sshClientConfig *ssh.ClientConfig, targetServers []Server) ([]CommandResponseWithServer, error) {
+func ParallelBatchExecute(command string, sshClientConfig *ssh.ClientConfig, targetServers []Server, logger *log.Logger) ([]CommandResponseWithServer, error) {
 
 	commandResponseWithServerChan := make(chan CommandResponseWithServer)
 	done := make(chan string)
@@ -127,7 +128,7 @@ func ParallelBatchExecute(command string, sshClientConfig *ssh.ClientConfig, tar
 	return commandResponseWithServer, nil
 }
 
-func BatchExecuter(command string, sshClientConfig *ssh.ClientConfig, targetServers []Server, batchSize int) ([]CommandResponseWithServer, error) {
+func BatchExecuter(command string, sshClientConfig *ssh.ClientConfig, targetServers []Server, batchSize int, logger *log.Logger) ([]CommandResponseWithServer, error) {
 
 	commandResponseAllBatches := make([]CommandResponseWithServer, 0, 0)
 
@@ -136,7 +137,7 @@ func BatchExecuter(command string, sshClientConfig *ssh.ClientConfig, targetServ
 	for index < len(targetServers) {
 		serversBatch := targetServers[index: index + batchSize]
 
-		commandResponseWithServer, err := ParallelBatchExecute(command, sshClientConfig, serversBatch)
+		commandResponseWithServer, err := ParallelBatchExecute(command, sshClientConfig, serversBatch, logger)
 
 		if err != nil {
 			return nil, err
