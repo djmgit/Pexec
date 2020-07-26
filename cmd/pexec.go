@@ -73,8 +73,6 @@ func main() {
 	}
 
 	for _, commandResponse := range response {
-		fmt.Println(commandResponse.Host + " : " + commandResponse.CommandResponse.StdOutput)
-
 		if commandResponse.Err != "" {
 			fmt.Printf("%s : Error : %s \n", commandResponse.Host, commandResponse.Err)
 		}
@@ -140,5 +138,3 @@ func getServers(serversList string) ([]lib.Server) {
 
 	return servers
 }
-
-
