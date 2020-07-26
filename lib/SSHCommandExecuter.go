@@ -7,6 +7,7 @@ import (
 	"log"
 )
 
+// Helper function to establish a new SSH sessiont o target server
 func GetSSHSession(config *ssh.ClientConfig, host string, port int) (*ssh.Session, error) {
 
 	client, err := ssh.Dial("tcp", host + ":" + strconv.FormatInt(int64(port), 10), config)
@@ -19,9 +20,14 @@ func GetSSHSession(config *ssh.ClientConfig, host string, port int) (*ssh.Sessio
 	  return session, nil
 }
 
+// Function responsible for actually executing the command reotely
+// on the given server
 func ExecuteCommand(command string, session *ssh.Session, config *ssh.ClientConfig, host string, port int, logger *log.Logger) (*CommandResponse, error) {
 
 	logger.Printf("Execcuting command on %s...\n", host)
+
+	// Check if there is already an existing session
+	// TODO : persist session
 	if session == nil {
 		logger.Printf("No existing session for %s, openning new SSH session...\n", host)
 		var sessionErr error
@@ -53,6 +59,7 @@ func ExecuteCommand(command string, session *ssh.Session, config *ssh.ClientConf
 	}, nil
 }
 
+// Function to execute command serially on the provided list of servers
 func SerialExecute(command string, sshClientConfig *ssh.ClientConfig,  targetServers []Server, logger *log.Logger) ([]CommandResponseWithServer, error) {
 
 	commandResponseWithServerList := make([]CommandResponseWithServer, 0, 0)
