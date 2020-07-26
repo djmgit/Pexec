@@ -79,9 +79,9 @@ func (client *PexecClient) getDefaults()  {
 
 func (client *PexecClient) populateTargetServers() {
 
-	client.Logger.Printf("Using provider %s", client.Provider)
+	client.Logger.Printf("Using provider %s...\n", client.Provider)
 
-	provider := GetProviderHandler(client.Provider)
+	provider := GetProviderHandler(client.Provider, client.Logger)
 
 	serverIps, err := provider.GetServers(client.ProviderOptions, client.Logger)
 
