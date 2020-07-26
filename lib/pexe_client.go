@@ -89,8 +89,10 @@ func (client *PexecClient) populateTargetServers() {
 
 	client.Logger.Printf("Using provider %s...\n", client.Provider)
 
+	// Get the appropriate upstream provider handler
 	provider := GetProviderHandler(client.Provider, client.Logger)
 
+	// Get the actual live server IPs
 	serverIps, err := provider.GetServers(client.ProviderOptions, client.Logger)
 
 	if err != nil {
@@ -99,6 +101,8 @@ func (client *PexecClient) populateTargetServers() {
 
 	targetServers := make([]Server, 0, 0)
 
+	// Iterate over the servers and create the appropriate server structs using
+	// IP and Port
 	for _, serverIp := range serverIps {
 
 		server := Server {
@@ -117,6 +121,7 @@ func (client *PexecClient) populateTargetServers() {
 
 }
 
+// Function to actually exeute the command remotely using the helper functions
 func (client *PexecClient) Run(command string) ([]CommandResponseWithServer, error) {
 
 	client.getDefaults()
