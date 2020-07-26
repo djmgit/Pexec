@@ -141,7 +141,7 @@ func (client *PexecClient) Run(command string) ([]CommandResponseWithServer, err
 	} else {
 
 		client.Logger.Printf("Preparing to execute command serially on all servers one by one...")
-		commandResponseWithServer, err := SerialExecute(command, client.SSHConConfig, client.TargetServers)
+		commandResponseWithServer, err := SerialExecute(command, client.SSHConConfig, client.TargetServers, client.Logger)
 
 		if err != nil {
 			return nil, err

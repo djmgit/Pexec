@@ -19,8 +19,9 @@ func GetSSHSession(config *ssh.ClientConfig, host string, port int) (*ssh.Sessio
 	  return session, nil
 }
 
-func ExecuteCommand(command string, session *ssh.Session, config *ssh.ClientConfig, host string, port int) (*CommandResponse, error) {
+func ExecuteCommand(command string, session *ssh.Session, config *ssh.ClientConfig, host string, port int, logger *log.Logger) (*CommandResponse, error) {
 
+	logger.Printf("Execcuting command on %s...n", host)
 	if session == nil {
 		var sessionErr error
 		session, sessionErr = GetSSHSession(config, host, port)
@@ -47,17 +48,18 @@ func ExecuteCommand(command string, session *ssh.Session, config *ssh.ClientConf
 	}, nil
 }
 
-func SerialExecute(command string, sshClientConfig *ssh.ClientConfig,  targetServers []Server) ([]CommandResponseWithServer, error) {
+func SerialExecute(command string, sshClientConfig *ssh.ClientConfig,  targetServers []Server, logger *log.Logger) ([]CommandResponseWithServer, error) {
 
 	commandResponseWithServerList := make([]CommandResponseWithServer, 0, 0)
 
 	for _, server := range(targetServers) {
 
-		CommandResponse, err := ExecuteCommand(command, nil, sshClientConfig, server.Host, server.Port)
+		CommandResponse, err := ExecuteCommand(command, nil, sshClientConfig, server.Host, server.Port, logger)
 		var commandResponseWithServer CommandResponseWithServer
 
 		if err == nil {
 
+			log.Printf("Command execution failed with error %s on %s", )
 			commandResponseWithServer = CommandResponseWithServer{
 
 				Host: server.Host,
@@ -86,7 +88,7 @@ func ParallelBatchExecute(command string, sshClientConfig *ssh.ClientConfig, tar
 
 		go func(localServer Server) {
 
-			CommandResponse, err := ExecuteCommand(command, nil, sshClientConfig, localServer.Host, localServer.Port)
+			CommandResponse, err := ExecuteCommand(command, nil, sshClientConfig, localServer.Host, localServer.Port, logger)
 			var commandResponseWithServer CommandResponseWithServer
 
 			if err == nil {
