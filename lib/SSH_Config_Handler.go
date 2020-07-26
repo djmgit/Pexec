@@ -5,6 +5,8 @@ import (
 	"io/ioutil"
 )
 
+// Helper function for preparing SSH config for launching SSH session on
+// target server
 func PrepareSSHConConfig(user, keyPath string) (*ssh.ClientConfig, error) {
 
 	signer, err := getPublicKeyAuth(keyPath)
@@ -13,6 +15,7 @@ func PrepareSSHConConfig(user, keyPath string) (*ssh.ClientConfig, error) {
 		return nil, err
 	}
 
+	// Creating config for SSH
 	config := &ssh.ClientConfig{
 		User: user,
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
@@ -24,6 +27,7 @@ func PrepareSSHConConfig(user, keyPath string) (*ssh.ClientConfig, error) {
 	return config, nil
 }
 
+// Configure using existing SSH private key
 func getPublicKeyAuth(file string) (ssh.AuthMethod, error) {
     buffer, err := ioutil.ReadFile(file)
     if err != nil {
