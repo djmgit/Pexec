@@ -21,12 +21,14 @@ func GetSSHSession(config *ssh.ClientConfig, host string, port int) (*ssh.Sessio
 
 func ExecuteCommand(command string, session *ssh.Session, config *ssh.ClientConfig, host string, port int, logger *log.Logger) (*CommandResponse, error) {
 
-	logger.Printf("Execcuting command on %s...n", host)
+	logger.Printf("Execcuting command on %s...\n", host)
 	if session == nil {
+		log.Printf("No existing session for %s, openning new SSH session...\n", host)
 		var sessionErr error
 		session, sessionErr = GetSSHSession(config, host, port)
 
 		if sessionErr != nil {
+			log.Printf("Failed to open session for %s, error : %s\n", host, sessionErr.Error())
 			return nil, sessionErr
 		}
 	}
@@ -39,8 +41,11 @@ func ExecuteCommand(command string, session *ssh.Session, config *ssh.ClientConf
 
 	cmdErr := session.Run(command)
 	if cmdErr != nil {
+		log.Printf("Command execution failed with error %s on %s\n", cmdErr.Error(), host)
 		return nil, cmdErr
 	}
+
+	log.Printf("Command execution successfull on %s\n", host)
 
 	return &CommandResponse{
 		StdOutput: StdOutput.String(),
@@ -58,8 +63,6 @@ func SerialExecute(command string, sshClientConfig *ssh.ClientConfig,  targetSer
 		var commandResponseWithServer CommandResponseWithServer
 
 		if err == nil {
-
-			log.Printf("Command execution failed with error %s on %s", )
 			commandResponseWithServer = CommandResponseWithServer{
 
 				Host: server.Host,
@@ -135,8 +138,10 @@ func BatchExecuter(command string, sshClientConfig *ssh.ClientConfig, targetServ
 	commandResponseAllBatches := make([]CommandResponseWithServer, 0, 0)
 
 	index := 0
+	batchNumber := 1
 
 	for index < len(targetServers) {
+		log.Printf("Executing Batch #%d...\n", batchNumber)
 		serversBatch := targetServers[index: index + batchSize]
 
 		commandResponseWithServer, err := ParallelBatchExecute(command, sshClientConfig, serversBatch, logger)
@@ -148,6 +153,7 @@ func BatchExecuter(command string, sshClientConfig *ssh.ClientConfig, targetServ
 		commandResponseAllBatches = append(commandResponseAllBatches, commandResponseWithServer...)
 
 		index += batchSize
+		batchNumber += 1
 	}
 
 	return commandResponseAllBatches, nil
