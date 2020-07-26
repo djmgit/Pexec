@@ -74,6 +74,18 @@ func main() {
 
 	for _, commandResponse := range response {
 		fmt.Println(commandResponse.Host + " : " + commandResponse.CommandResponse.StdOutput)
+
+		if commandResponse.Err != "" {
+			fmt.Printf("%s : Error : %s \n", commandResponse.Host, commandResponse.Err)
+		}
+
+		if commandResponse.CommandResponse.StdError != "" {
+			fmt.Printf("%s : ShellError : %s \n", commandResponse.Host, commandResponse.CommandResponse.StdError)
+		}
+
+		if commandResponse.CommandResponse.StdOutput != "" {
+			fmt.Printf("%s : ShellResponse : %s \n", commandResponse.Host, commandResponse.CommandResponse.StdOutput)
+		}
 	}
 }
 
