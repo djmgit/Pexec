@@ -4,3 +4,6 @@ main/main
 main/main2
 main/main.go
 main/main2.go
+cmd/pexec
+cmd/main
+cmd/cmd
