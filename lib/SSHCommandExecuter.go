@@ -151,6 +151,7 @@ func ParallelBatchExecute(command string, sshClientConfig *ssh.ClientConfig, tar
 	return commandResponseWithServer, nil
 }
 
+// Fucntion to implement execution of commands on servers in batches
 func BatchExecuter(command string, sshClientConfig *ssh.ClientConfig, targetServers []Server, batchSize int, logger *log.Logger) ([]CommandResponseWithServer, error) {
 
 	commandResponseAllBatches := make([]CommandResponseWithServer, 0, 0)
@@ -158,16 +159,21 @@ func BatchExecuter(command string, sshClientConfig *ssh.ClientConfig, targetServ
 	index := 0
 	batchNumber := 1
 
+	// Iterate over the list of Servers for creating batches
 	for index < len(targetServers) {
 		logger.Printf("Executing Batch #%d...\n", batchNumber)
+
+		// Extract a batch of servers
 		serversBatch := targetServers[index: index + batchSize]
 
+		// Execute the command parallely on the batch of servers
 		commandResponseWithServer, err := ParallelBatchExecute(command, sshClientConfig, serversBatch, logger)
 
 		if err != nil {
 			return nil, err
 		}
 
+		// Slit the returned list of responses and add them to the final list
 		commandResponseAllBatches = append(commandResponseAllBatches, commandResponseWithServer...)
 
 		index += batchSize
