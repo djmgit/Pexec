@@ -98,6 +98,8 @@ func ParallelBatchExecute(command string, sshClientConfig *ssh.ClientConfig, tar
 
 	for _, server := range(targetServers) {
 
+		// For each of the servers in the target Servers list, spawn a goroutine
+		// for remotely executing the command on that server.
 		go func(localServer Server) {
 
 			CommandResponse, err := ExecuteCommand(command, nil, sshClientConfig, localServer.Host, localServer.Port, logger)
@@ -118,6 +120,8 @@ func ParallelBatchExecute(command string, sshClientConfig *ssh.ClientConfig, tar
 				}
 			}
 
+			// Send result to the above created channel
+			// Done channel is used to terminate all the goroutines whenever requirted
 			select {
 				case commandResponseWithServerChan <- commandResponseWithServer:
 				case <- done:
@@ -130,13 +134,18 @@ func ParallelBatchExecute(command string, sshClientConfig *ssh.ClientConfig, tar
 
 	commandResponseWithServer := make([]CommandResponseWithServer, 0, 0)
 
+	// Iterate over the number of servers present in targetServers list
 	for _, _ = range targetServers {
+
+		// Pull out a result from the channel
 		individualServerResponse := <-commandResponseWithServerChan
 		commandResponseWithServer = append(commandResponseWithServer, individualServerResponse)
 	}
 
-	//time.Sleep(client.TimeOut * time.Second)
+	// Close the done channel
 	close(done)
+
+	// Close thse main response channel
 	close(commandResponseWithServerChan)
 
 	return commandResponseWithServer, nil
