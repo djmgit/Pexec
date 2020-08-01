@@ -11,3 +11,7 @@ and its corresponding value, PExec will use those provided information to discov
 them over SSH on the desired port and execute the given command.
 
 As of now PExec only provided integration with AWS for auto discovery of instances.
+
+## QuickStart
+
+### Using PExec as a library
