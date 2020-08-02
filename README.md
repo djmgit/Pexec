@@ -148,3 +148,5 @@ SSH RSA key will be used.
 > -key=[path_to_ssh_key] \
 >  -user=ubuntu -cmd="echo 'Hello World'"
 ```
+
+If you want to provide custom tag key and tag value for filtering instances, you can do so by using ```tag_key``` and ```tag_value``` parameters.
