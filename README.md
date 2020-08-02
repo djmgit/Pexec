@@ -81,3 +81,49 @@ Right now there is no way to configure a delay between the processing of two gro
 In case you do not want PExec to execute the command in parallel on all the servers, you can set ```Parallel``` to ```false```. Doing that
 will cause PExec to iterate sequentially over the list of discovered servers and execute the provided command.
 
+**Executing command remotely on custom provided servers**
+
+PExec also allows you to provide host IPs manually for remote command execution.
+
+```
+package main
+
+import (
+	pexec "github.com/djmgit/pexec/lib"
+	"fmt"
+)
+
+func main() {
+
+	pClient := pexec.PexecClient{
+		TargetServers : []pexec.Server{
+			{
+				Host: "52.87.231.249",
+				Port: 22,
+			},
+			{
+				Host: "35.174.213.9",
+				Port: 22,
+			},
+		},
+		Parallel: true,
+		BatchSize: 0,
+		User: "ubuntu",
+		Provider: "CUSTOM",
+		KeyPath: "<path_to_ssh_key_trusted_by_the_target_insatnces>",
+	}
+
+	response, err := pClient.Run("echo 'Hello World'")
+
+	if err != nil {
+		fmt.Println(err.Error())
+	} else {
+		fmt.Println("In main...")
+		for _, commandResponse := range response {
+			fmt.Println(commandResponse.Host + " : " + commandResponse.CommandResponse.StdOutput)
+		}
+	}
+}
+
+```
+
