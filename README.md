@@ -15,3 +15,48 @@ As of now PExec only provided integration with AWS for auto discovery of instanc
 ## QuickStart
 
 ### Using PExec as a library
+
+** Executing command remotely on all the instances of an AWS Autoscaling group using automatic service discovery **
+
+```
+package main
+
+import (
+	pexec "github.com/djmgit/pexec/lib"
+	"fmt"
+)
+
+func main() {
+
+	providerOptions := map[string]string{
+		"region": "aws_region_name",
+		"addrType": "public_v4",
+		"tagKey": "aws:autoscaling:groupName",
+		"tagValue": "<aws_asg_name>",
+		"accessKeyId": "<aws_access_key_id>",
+		"secretAccessKey": "<aws_secret_access_key>",
+	}
+
+	pClient := pexec.PexecClient{
+		Parallel: true,
+		BatchSize: 0,
+		User: "ubuntu",
+		Port: 22,
+		Provider: "AWS",
+		ProviderOptions: providerOptions,
+		KeyPath: "<path_to_ssh_key_trusted_by_the_target_insatnces>",
+	}
+
+	response, err := pClient.Run("echo 'Hellow World'")
+
+	if err != nil {
+		fmt.Println(err.Error())
+	} else {
+		fmt.Println("In main...")
+		for _, commandResponse := range response {
+			fmt.Println(commandResponse.Host + " : " + commandResponse.CommandResponse.StdOutput)
+		}
+	}
+}
+
+```
