@@ -16,7 +16,7 @@ As of now PExec only provided integration with AWS for auto discovery of instanc
 
 ### Using PExec as a library
 
-** Executing command remotely on all the instances of an AWS Autoscaling group using automatic service discovery **
+**Executing command remotely on all the instances of an AWS Autoscaling group using automatic service discovery**
 
 ```
 package main
@@ -60,3 +60,17 @@ func main() {
 }
 
 ```
+
+In the above example, the tagKey parameter's value can be changed to some other valid key and the corresponding tagvalue can be provided
+to filter desired instances.
+In the above Pexec client configuration, parallel is set to ```true``` and batchSize is set to ```0``` which means, command will be executed
+simultaneously on all the discovered servers. Setting the batchSize to non-zero, for example ```2``` would distribute the discovered servers
+into groups of ```2``` servers and the command would be executed in parallel on all the individual servers of a group but each group will be processed
+sequentially.
+
+For example : if there were 4 servers and batchSize would be set to 2. then Pexec would distribute the 4 discovered servers into 2 grousp of two
+servers each, it would iterate sequentially over each group and execute the command on both the servers of the current group in parallel.
+This can be usefull when you dont want to execute your command on all the servers at once but still want to speed up the process. For example you
+want to restart apache or redis slaves, but you dont want to take down all of them at once but in batches.
+
+Right now there is no way to configure a delay between the processing of two groups, but that will be added soon.
