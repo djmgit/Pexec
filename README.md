@@ -150,3 +150,13 @@ SSH RSA key will be used.
 ```
 
 If you want to provide custom tag key and tag value for filtering instances, you can do so by using ```tag_key``` and ```tag_value``` parameters.
+
+**Executing command remotely on custom provided servers**
+
+```
+./pexec -provider=CUSTOM \
+> -key=[path_to_ssh_key] \
+> -user=ubuntu \
+> -cmd="echo 'Hello World'" \
+> -servers=52.87.231.249:22,35.174.213.9:22
+```
