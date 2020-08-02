@@ -10,6 +10,9 @@ Once PExec is provieded with the neccessary constraints and parameneters - for e
 and its corresponding value, PExec will use those provided information to discover the IPs of the desired instances, connect to
 them over SSH on the desired port and execute the given command.
 
+PExec can be used for automating usual tasks, or as a part of a bigger tool or CI/CD where you want to execute commands remotely
+and you want to make it fast.
+
 As of now PExec only provided integration with AWS for auto discovery of instances.
 
 ## QuickStart
@@ -68,9 +71,10 @@ simultaneously on all the discovered servers. Setting the batchSize to non-zero,
 into groups of ```2``` servers and the command would be executed in parallel on all the individual servers of a group but each group will be processed
 sequentially.
 
-For example : if there were 4 servers and batchSize would be set to 2. then Pexec would distribute the 4 discovered servers into 2 grousp of two
+For example : if there were 4 servers and batchSize would be set to 2. then PExec would distribute the 4 discovered servers into 2 grousp of two
 servers each, it would iterate sequentially over each group and execute the command on both the servers of the current group in parallel.
 This can be usefull when you dont want to execute your command on all the servers at once but still want to speed up the process. For example you
 want to restart apache or redis slaves, but you dont want to take down all of them at once but in batches.
 
 Right now there is no way to configure a delay between the processing of two groups, but that will be added soon.
+
