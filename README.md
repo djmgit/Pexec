@@ -137,3 +137,14 @@ not password. So you need to provide you ```private key``` path or path to your 
 Also the key you are providing should be trusted by the target hosts. If you omit the ```keyPath``` field then the path to the current users
 SSH RSA key will be used.
 
+### Using PExec as a CLI based tool
+
+**Executing command remotely on all the instances of an AWS Autoscaling group using automatic service discovery**
+
+```
+./pexec -provider=AWS -port=22 \
+> -asg=asg_1 -region=[aws_region] \
+> --access_key_id=[aws_access_key_id] -secret_access_key=[aws_secret_access_key] \
+> -key=[path_to_ssh_key] \
+>  -user=ubuntu -cmd="echo 'Hello World'"
+```
