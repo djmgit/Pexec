@@ -57,7 +57,7 @@ func (client *PexecClient) getDefaults()  {
 
 	if client.Provider == "" {
 		client.Provider = CUSTOM
-	} else {
+	} else if client.Provider != CUSTOM {
 
 		// Populate servesrs from upstream provider
 		client.populateTargetServers()
