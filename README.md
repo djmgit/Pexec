@@ -78,3 +78,6 @@ want to restart apache or redis slaves, but you dont want to take down all of th
 
 Right now there is no way to configure a delay between the processing of two groups, but that will be added soon.
 
+In case you do not want PExec to execute the command in parallel on all the servers, you can set ```Parallel``` to ```false```. Doing that
+will cause PExec to iterate sequentially over the list of discovered servers and execute the provided command.
+
