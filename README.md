@@ -64,7 +64,7 @@ func main() {
 
 ```
 
-In the above example, the tagKey parameter's value can be changed to some other valid key and the corresponding tagvalue can be provided
+In the above example, the tagKey field's value can be changed to some other valid key and the corresponding tagvalue can be provided
 to filter desired instances.
 In the above Pexec client configuration, parallel is set to ```true``` and batchSize is set to ```0``` which means, command will be executed
 simultaneously on all the discovered servers. Setting the batchSize to non-zero, for example ```2``` would distribute the discovered servers
@@ -126,4 +126,14 @@ func main() {
 }
 
 ```
+
+In order to execute command on custom list of hosts, the list of hosts has to be provided as the ```TargetServers``` field. The list consists of
+structs of type ```pexec.Server``` which has only two fields : ```Host``` and ```Port```. Remaining all the other field have the same meaning.
+
+In both the examples presented above, the field ```Provider``` as of now can be either of ```AWS``` or ```CUSTOM```.
+
+Also it is to be noted that PExec executes commands on the remote servers using ```SSH``` and it allows SSH only via key based authentication and
+not password. So you need to provide you ```private key``` path or path to your ```pem``` file in ```keyPath``` field of ```PexecClient``` struct.
+Also the key you are providing should be trusted by the target hosts. If you omit the ```keyPath``` field then the path to the current users
+SSH RSA key will be used.
 
