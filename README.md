@@ -143,7 +143,7 @@ SSH RSA key will be used.
 
 ```
 ./pexec -provider=AWS -port=22 \
-> -asg=asg_1 -region=[aws_region] \
+> -asg=[aws_asg_name] -region=[aws_region] \
 > --access_key_id=[aws_access_key_id] -secret_access_key=[aws_secret_access_key] \
 > -key=[path_to_ssh_key] \
 >  -user=ubuntu -cmd="echo 'Hello World'"
