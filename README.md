@@ -183,3 +183,61 @@ you can build PExec from source:
 - You will find the binary at cmd/
 - Run ```./pexec -h```, it should show you all the relevant options.
 - Optionally you can copy it to your path.
+
+
+## PExec library
+
+Given below is the ```PexecClient``` struct you will have to initialise in order to use PExec as a library.
+Not all fields are required to be used as they will be assigned a default value.
+
+```
+type PexecClient struct {
+
+	Ser []Server
+
+	Port int
+
+	ProviderOptions map[string]string
+
+	Provider string
+
+	Parallel bool
+
+	Batch bool
+
+	BatchSize int
+
+	User string
+
+	KeyPath string
+
+	TimeOut time.Duration
+
+	SSHConConfig *ssh.ClientConfig
+
+	Debug bool
+
+	Logger *log.Logger
+}
+```
+
+- TargetServers is a list of structs of type Server. You will have to initialise this in case you want to execute commands
+  remote custom provided hosts. Server is struct is as shown below:
+  
+  ```
+  type Server struct {
+	Host string
+
+	Port int
+  }
+  ```
+- Port : Port to use for ssh, this will be used when you are using a provider other than **CUSTOM**. Default will be **22**. For custom provided
+  list of servers, you will have to provided port for the individual servers.
+  
+- ProviderOptions: Options to be used when using a provider (AWS as of now). Options required as of now:
+	- region
+	- addrType
+	- tagKey
+	- tagValue
+	- accessKeyId
+	- secretAccessKey
