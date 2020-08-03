@@ -160,3 +160,14 @@ If you want to provide custom tag key and tag value for filtering instances, you
 > -cmd="echo 'Hello World'" \
 > -servers=52.87.231.249:22,35.174.213.9:22
 ```
+
+## Installing PExec
+
+### Using prebuilt binary
+
+You can use the prebuilt binary from github :
+
+- Download the prebuilt binary from <a href="https://github.com/djmgit/Pexec/releases/tag/v0.0.1">here</a>
+- Extract the binary using ```tar -xvf pexec.tar.xz```
+- Copy the binary to your path for example ```/usr/local/bin```
+- Open terminal and execute ```pexec -h```, it should print all the relevant options.
