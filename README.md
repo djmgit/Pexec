@@ -203,8 +203,6 @@ type PexecClient struct {
 
 	Parallel bool
 
-	Batch bool
-
 	BatchSize int
 
 	User string
@@ -241,3 +239,12 @@ type PexecClient struct {
 	- tagValue
 	- accessKeyId
 	- secretAccessKey
+
+- Provider : This can be either of **CUSTOM** or **AWS** as of now. If nothing is provided then it will be set to CUSTOM.
+
+- Parallel : If set to **true** then command will be executed in parallel in all the provided/discovered servers or else it will be executed
+             sequentially
+	 
+- BatchSize : If set to non-zero value and if **Parallel** is set to true, then teh list of provided/discovered hosts will be distributed in batches
+              of the provided number of hosts and command will be executed parallely on the members of the individual groups. It is to be noted that the
+	      groups themselves will be iterated upon sequentially. Please see the example in the **QuickStart** section above for further explaination.
