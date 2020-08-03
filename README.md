@@ -167,7 +167,7 @@ If you want to provide custom tag key and tag value for filtering instances, you
 
 You can use the prebuilt binary from github :
 
-- Download the compressed prebuilt binary from <a href="https://github.com/djmgit/Pexec/releases/download/v0.0.1/pexec.tar.xz">here</a>
+- Download the compressed prebuilt binary from <a href="https://github.com/djmgit/Pexec/releases/download/v0.0.1/pexec-v0.0.1.tar.xz">here</a>
 - Extract the binary using ```tar -xvf pexec.tar.xz```
 - Copy the binary to your path for example ```/usr/local/bin```
 - Open terminal and execute ```pexec -h```, it should print all the relevant options.
