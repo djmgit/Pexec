@@ -193,7 +193,7 @@ Not all fields are required to be used as they will be assigned a default value.
 ```
 type PexecClient struct {
 
-	Ser []Server
+	Servers []Server
 
 	Port int
 
@@ -208,10 +208,6 @@ type PexecClient struct {
 	User string
 
 	KeyPath string
-
-	TimeOut time.Duration
-
-	SSHConConfig *ssh.ClientConfig
 
 	Debug bool
 
@@ -248,3 +244,13 @@ type PexecClient struct {
 - BatchSize : If set to non-zero value and if **Parallel** is set to true, then teh list of provided/discovered hosts will be distributed in batches
               of the provided number of hosts and command will be executed parallely on the members of the individual groups. It is to be noted that the
 	      groups themselves will be iterated upon sequentially. Please see the example in the **QuickStart** section above for further explaination.
+	      
+- User : User to be used by PExec for openning SSH connection. Default will be **root**
+
+- KeyPath : The path to SSH key to be used for SSH. It can be a pem file containing the key or the key itself trusted by the target servers.
+
+- 
+
+
+	      
+
