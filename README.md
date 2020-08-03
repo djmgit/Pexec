@@ -161,13 +161,25 @@ If you want to provide custom tag key and tag value for filtering instances, you
 > -servers=52.87.231.249:22,35.174.213.9:22
 ```
 
-## Installing PExec
+## Installing PExec for using it as a CLI tool
 
 ### Using prebuilt binary
 
 You can use the prebuilt binary from github :
 
-- Download the prebuilt binary from <a href="https://github.com/djmgit/Pexec/releases/tag/v0.0.1">here</a>
+- Download the compressed prebuilt binary from <a href="https://github.com/djmgit/Pexec/releases/download/v0.0.1/pexec.tar.xz">here</a>
 - Extract the binary using ```tar -xvf pexec.tar.xz```
 - Copy the binary to your path for example ```/usr/local/bin```
 - Open terminal and execute ```pexec -h```, it should print all the relevant options.
+
+### Building PExec from source
+
+you can build PExec from source:
+
+- Clone this repository or download the code from <a href="https://github.com/djmgit/Pexec/archive/v0.0.1.tar.gz">here</a>
+- Extract the source if requited and enter into the source root.
+- You will require the **go toolchain** for this, preferably version>=1.11
+- From the project root execute ```go build -o ./cmd/pexec cmd/pexec.go```
+- You will find the binary at cmd/
+- Run ```./pexec -h```, it should show you all the relevant options.
+- Optionally you can copy it to your path.
