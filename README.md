@@ -249,7 +249,11 @@ type PexecClient struct {
 
 - KeyPath : The path to SSH key to be used for SSH. It can be a pem file containing the key or the key itself trusted by the target servers.
 
-- 
+- Debug : If set to true, PExexc will generate debug statements.
+
+- Logger : This can be custom provided logger. However if Debug is set to true, then a logger will be created and assigned to this field.
+
+Apart from the above fields the struct also contains some other fileds which are used internally by PExec.
 
 
 	      
