@@ -185,7 +185,7 @@ you can build PExec from source:
 - Optionally you can copy it to your path.
 
 
-## PExec library
+## PExec library reference
 
 Given below is the ```PexecClient``` struct you will have to initialise in order to use PExec as a library.
 Not all fields are required to be used as they will be assigned a default value.
@@ -193,7 +193,7 @@ Not all fields are required to be used as they will be assigned a default value.
 ```
 type PexecClient struct {
 
-	Servers []Server
+	TargetServers []Server
 
 	Port int
 
@@ -255,6 +255,48 @@ type PexecClient struct {
 
 Apart from the above fields the struct also contains some other fileds which are used internally by PExec.
 
+## PExec CLI tool refernce
+
+The follow options are provided by the CLI tool:
+
+```
+Usage of ./pexec:
+  -access_key_id string
+    	AWS Access key id
+  -addr_type string
+    	Command to execute on the servers (default "public_v4")
+  -asg string
+    	AWS Auto scaling group name
+  -batch_size int
+    	If more than one, then batches of that many servers will be executed in parallel
+  -cmd string
+    	Command to execute on the servers
+  -debug
+    	Enable debugging, by default false
+  -key string
+    	If not provided then default key path for rsa key will be used - /home/<user>/.ssh/id_rsa
+  -parallel
+    	If true then commands will be exected in parallel on the discovered or provided servers (default true)
+  -port int
+    	Port to override for all
+  -provider string
+    	Provider of servers - can be one of CUSTOM | AWS (default "CUSTOM")
+  -region string
+    	AWS region if provider is aws, default is us-east-1 (default "us-east-1")
+  -secret_access_key string
+    	AWS secret access key
+  -servers string
+    	Server ip and port in format <IP>:<PORT>, multuple values can be separated by ','. If port is not provided then 22 will be used as default SSH port
+  -tag_key string
+    	tag key name
+  -tag_value string
+    	tag value
+  -user string
+    	User which will be used to login to the server (default "root")
+
+```
+
+Most of the options directly refers to a field in the PexecClient struct as already described in the previous section.
 
 	      
 
