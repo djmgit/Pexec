@@ -298,5 +298,8 @@ Usage of ./pexec:
 
 Most of the options directly refers to a field in the PexecClient struct as already described in the previous section.
 
-	      
-
+## Contributing to PExec
+	     
+Contribution to PExec are most welcome. If you have found a bug or if you have any feature in mind or if you want to
+help in integrating other cloud platforms or other providers/prchestrators like Consul, DCOS, etc, please create an issue
+send a PR. I would be extremely happy to review it.
